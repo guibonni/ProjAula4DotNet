@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bdaula4Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="cidade">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descricao" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="idEstado" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="estado" Relationship="Self.FK_cidade_estado" FromRole="cidade" ToRole="estado" />
+  </EntityType>
+  <EntityType Name="estado">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descricao" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="cidade" Relationship="Self.FK_cidade_estado" FromRole="estado" ToRole="cidade" />
+  </EntityType>
+  <Association Name="FK_cidade_estado">
+    <End Role="estado" Type="Self.estado" Multiplicity="1" />
+    <End Role="cidade" Type="Self.cidade" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="estado">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="cidade">
+        <PropertyRef Name="idEstado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bdaula4Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cidade" EntityType="Self.cidade" />
+    <EntitySet Name="estado" EntityType="Self.estado" />
+    <AssociationSet Name="FK_cidade_estado" Association="Self.FK_cidade_estado">
+      <End Role="estado" EntitySet="estado" />
+      <End Role="cidade" EntitySet="cidade" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
